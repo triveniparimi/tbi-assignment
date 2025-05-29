@@ -1,0 +1,27 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: pip install fastapi uvicorn
+
+      - name: Build Docker image
+        run: docker build -t ml-app -f docker/Dockerfile .
+
+      - name: Push Docker image (replace with login step if needed)
+        run: echo "Docker push step - use secrets for login if pushing to Docker Hub"
