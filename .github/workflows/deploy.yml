@@ -1,27 +1,22 @@
-name: CI/CD Pipeline
+name: Build and Push Docker Image
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [main]
 
 jobs:
-  build-and-deploy:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.9
-
-      - name: Install dependencies
-        run: pip install fastapi uvicorn
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.triveniparimi }}" | docker login -u "${{ secrets.Remember2023 }}" --password-stdin
 
       - name: Build Docker image
-        run: docker build -t ml-app -f docker/Dockerfile .
+        run: docker build -t triveniparimi/fastapi-app:latest .
 
-      - name: Push Docker image (replace with login step if needed)
-        run: echo "Docker push step - use secrets for login if pushing to Docker Hub"
+      - name: Push Docker image
+        run: docker push triveniparimi/fastapi-app:latest
